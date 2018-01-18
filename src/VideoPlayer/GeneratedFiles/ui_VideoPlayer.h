@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
@@ -27,16 +26,16 @@ class Ui_VideoPlayerClass
 {
 public:
     QWidget *centralWidget;
+    VideoOpenGLWidget *vowScreen;
+    QWidget *bottomWidget;
     QPushButton *pushButton;
     QPushButton *pauseButton;
     QPushButton *playButton;
     QSlider *playSlider;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayout_3;
+    QWidget *topButtons;
     QPushButton *minButton;
     QPushButton *maxButton;
     QPushButton *closeButton;
-    VideoOpenGLWidget *vowScreen;
 
     void setupUi(QMainWindow *VideoPlayerClass)
     {
@@ -91,53 +90,41 @@ public:
 ""));
         centralWidget = new QWidget(VideoPlayerClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(500, 470, 93, 28));
-        pauseButton = new QPushButton(centralWidget);
-        pauseButton->setObjectName(QStringLiteral("pauseButton"));
-        pauseButton->setGeometry(QRect(360, 470, 31, 28));
-        playButton = new QPushButton(centralWidget);
-        playButton->setObjectName(QStringLiteral("playButton"));
-        playButton->setGeometry(QRect(400, 470, 31, 28));
-        playSlider = new QSlider(centralWidget);
-        playSlider->setObjectName(QStringLiteral("playSlider"));
-        playSlider->setGeometry(QRect(110, 430, 601, 22));
-        playSlider->setMaximum(999);
-        playSlider->setOrientation(Qt::Horizontal);
-        horizontalLayoutWidget = new QWidget(centralWidget);
-        horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(790, 0, 62, 25));
-        horizontalLayout_3 = new QHBoxLayout(horizontalLayoutWidget);
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
-        minButton = new QPushButton(horizontalLayoutWidget);
-        minButton->setObjectName(QStringLiteral("minButton"));
-
-        horizontalLayout_3->addWidget(minButton);
-
-        maxButton = new QPushButton(horizontalLayoutWidget);
-        maxButton->setObjectName(QStringLiteral("maxButton"));
-
-        horizontalLayout_3->addWidget(maxButton);
-
-        closeButton = new QPushButton(horizontalLayoutWidget);
-        closeButton->setObjectName(QStringLiteral("closeButton"));
-
-        horizontalLayout_3->addWidget(closeButton);
-
         vowScreen = new VideoOpenGLWidget(centralWidget);
         vowScreen->setObjectName(QStringLiteral("vowScreen"));
         vowScreen->setGeometry(QRect(0, 0, 852, 520));
+        bottomWidget = new QWidget(centralWidget);
+        bottomWidget->setObjectName(QStringLiteral("bottomWidget"));
+        bottomWidget->setGeometry(QRect(0, 430, 851, 80));
+        bottomWidget->setStyleSheet(QLatin1String(" \n"
+"background-color: rgba(0, 0, 0, 122);"));
+        pushButton = new QPushButton(bottomWidget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setGeometry(QRect(350, 40, 93, 28));
+        pauseButton = new QPushButton(bottomWidget);
+        pauseButton->setObjectName(QStringLiteral("pauseButton"));
+        pauseButton->setGeometry(QRect(450, 40, 31, 28));
+        playButton = new QPushButton(bottomWidget);
+        playButton->setObjectName(QStringLiteral("playButton"));
+        playButton->setGeometry(QRect(490, 40, 31, 28));
+        playSlider = new QSlider(bottomWidget);
+        playSlider->setObjectName(QStringLiteral("playSlider"));
+        playSlider->setGeometry(QRect(120, 10, 601, 22));
+        playSlider->setMaximum(999);
+        playSlider->setOrientation(Qt::Horizontal);
+        topButtons = new QWidget(centralWidget);
+        topButtons->setObjectName(QStringLiteral("topButtons"));
+        topButtons->setGeometry(QRect(770, 10, 71, 21));
+        minButton = new QPushButton(topButtons);
+        minButton->setObjectName(QStringLiteral("minButton"));
+        minButton->setGeometry(QRect(0, 0, 18, 19));
+        maxButton = new QPushButton(topButtons);
+        maxButton->setObjectName(QStringLiteral("maxButton"));
+        maxButton->setGeometry(QRect(20, 0, 27, 19));
+        closeButton = new QPushButton(topButtons);
+        closeButton->setObjectName(QStringLiteral("closeButton"));
+        closeButton->setGeometry(QRect(50, 0, 21, 20));
         VideoPlayerClass->setCentralWidget(centralWidget);
-        vowScreen->raise();
-        pushButton->raise();
-        pauseButton->raise();
-        playButton->raise();
-        playSlider->raise();
-        horizontalLayoutWidget->raise();
 
         retranslateUi(VideoPlayerClass);
         QObject::connect(pushButton, SIGNAL(clicked()), VideoPlayerClass, SLOT(openVideo()));

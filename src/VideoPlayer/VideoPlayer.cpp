@@ -13,7 +13,6 @@ VideoPlayer::VideoPlayer(QWidget *parent)
 	ui.setupUi(this);
 	setWindowFlags(Qt::FramelessWindowHint);
  
-
 	qRegisterMetaType<cv::Mat>("cv::Mat");
 	QObject::connect(VideoThread::getInstance(),
 		SIGNAL(sendVideoFrame(cv::Mat)),
@@ -58,7 +57,19 @@ void VideoPlayer::mouseDoubleClickEvent(QMouseEvent * event)
 
 void VideoPlayer::resizeEvent(QResizeEvent * e)
 {
-	ui.vowScreen->resize(size());
+	ui.vowScreen->resize(size()); 
+	ui.bottomWidget->move(0, this->height() - ui.bottomWidget->height());
+	ui.bottomWidget->resize(QSize(this->width(), ui.bottomWidget->height()));
+
+	
+
+	ui.playSlider->move(25, ui.playSlider->y());
+	ui.playSlider->resize(this->width() - 50, ui.playSlider->height());
+
+	ui.playButton->move(ui.bottomWidget->width() / 2 + 50, ui.playSlider->y()+30);
+	ui.pushButton->move(ui.bottomWidget->width() / 2 - 50, ui.playSlider->y() + 30);
+
+	ui.topButtons->move(this->width() - ui.topButtons->width() - 5, ui.topButtons->height() + 5);
 }
 
 void VideoPlayer::play()
