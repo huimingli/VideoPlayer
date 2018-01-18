@@ -13,11 +13,11 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
-#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 #include "videoopenglwidget.h"
 
@@ -27,21 +27,24 @@ class Ui_VideoPlayerClass
 {
 public:
     QWidget *centralWidget;
-    VideoOpenGLWidget *vowScreen;
     QPushButton *pushButton;
     QPushButton *pauseButton;
     QPushButton *playButton;
     QSlider *playSlider;
+    QWidget *horizontalLayoutWidget;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *minButton;
+    QPushButton *maxButton;
     QPushButton *closeButton;
-    QStatusBar *statusBar;
+    VideoOpenGLWidget *vowScreen;
 
     void setupUi(QMainWindow *VideoPlayerClass)
     {
         if (VideoPlayerClass->objectName().isEmpty())
             VideoPlayerClass->setObjectName(QStringLiteral("VideoPlayerClass"));
-        VideoPlayerClass->resize(854, 520);
+        VideoPlayerClass->resize(852, 515);
         VideoPlayerClass->setStyleSheet(QString::fromUtf8("#VideoPlayerClass{\n"
-"background-color: rgb(53, 53, 53);\n"
+"background-color: rgb(0, 0, 0);\n"
 "}\n"
 "QPushButton:!hover\n"
 "{\n"
@@ -60,16 +63,16 @@ public:
 "	font: 75 12pt \"\351\273\221\344\275\223\";\n"
 "}\n"
 "#centralWidget{\n"
-"background-color: rgb(53, 53, 53);\n"
+"background-color: rgb(0, 0, 0);\n"
 "}\n"
-"#closeButton\n"
+"#closeButton,#maxButton,#minButton\n"
 "{\n"
 "font: 75 11pt \"\347\255\211\347\272\277\";\n"
 "color: rgb(255, 255, 255);\n"
-"background-color: rgb(53, 53, 53);\n"
+"background-color: rgb(0, 0,"
+                        " 0);\n"
 "}\n"
-""
-                        "\n"
+"\n"
 "#playButton{background-color: rgba(255, 255, 255,0);}\n"
 "\n"
 "#playButton:hover{image: url(:/VideoPlayer/Resources/PlayN.png);}\n"
@@ -88,30 +91,53 @@ public:
 ""));
         centralWidget = new QWidget(VideoPlayerClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        vowScreen = new VideoOpenGLWidget(centralWidget);
-        vowScreen->setObjectName(QStringLiteral("vowScreen"));
-        vowScreen->setGeometry(QRect(0, 20, 600, 400));
         pushButton = new QPushButton(centralWidget);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(660, 20, 93, 28));
+        pushButton->setGeometry(QRect(500, 470, 93, 28));
         pauseButton = new QPushButton(centralWidget);
         pauseButton->setObjectName(QStringLiteral("pauseButton"));
-        pauseButton->setGeometry(QRect(220, 440, 31, 28));
+        pauseButton->setGeometry(QRect(360, 470, 31, 28));
         playButton = new QPushButton(centralWidget);
         playButton->setObjectName(QStringLiteral("playButton"));
-        playButton->setGeometry(QRect(250, 440, 31, 28));
+        playButton->setGeometry(QRect(400, 470, 31, 28));
         playSlider = new QSlider(centralWidget);
         playSlider->setObjectName(QStringLiteral("playSlider"));
-        playSlider->setGeometry(QRect(0, 420, 601, 22));
+        playSlider->setGeometry(QRect(110, 430, 601, 22));
         playSlider->setMaximum(999);
         playSlider->setOrientation(Qt::Horizontal);
-        closeButton = new QPushButton(centralWidget);
+        horizontalLayoutWidget = new QWidget(centralWidget);
+        horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
+        horizontalLayoutWidget->setGeometry(QRect(790, 0, 62, 25));
+        horizontalLayout_3 = new QHBoxLayout(horizontalLayoutWidget);
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
+        minButton = new QPushButton(horizontalLayoutWidget);
+        minButton->setObjectName(QStringLiteral("minButton"));
+
+        horizontalLayout_3->addWidget(minButton);
+
+        maxButton = new QPushButton(horizontalLayoutWidget);
+        maxButton->setObjectName(QStringLiteral("maxButton"));
+
+        horizontalLayout_3->addWidget(maxButton);
+
+        closeButton = new QPushButton(horizontalLayoutWidget);
         closeButton->setObjectName(QStringLiteral("closeButton"));
-        closeButton->setGeometry(QRect(820, 0, 31, 28));
+
+        horizontalLayout_3->addWidget(closeButton);
+
+        vowScreen = new VideoOpenGLWidget(centralWidget);
+        vowScreen->setObjectName(QStringLiteral("vowScreen"));
+        vowScreen->setGeometry(QRect(0, 0, 852, 520));
         VideoPlayerClass->setCentralWidget(centralWidget);
-        statusBar = new QStatusBar(VideoPlayerClass);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        VideoPlayerClass->setStatusBar(statusBar);
+        vowScreen->raise();
+        pushButton->raise();
+        pauseButton->raise();
+        playButton->raise();
+        playSlider->raise();
+        horizontalLayoutWidget->raise();
 
         retranslateUi(VideoPlayerClass);
         QObject::connect(pushButton, SIGNAL(clicked()), VideoPlayerClass, SLOT(openVideo()));
@@ -121,6 +147,8 @@ public:
         QObject::connect(playSlider, SIGNAL(sliderPressed()), VideoPlayerClass, SLOT(sliderPress()));
         QObject::connect(playSlider, SIGNAL(sliderReleased()), VideoPlayerClass, SLOT(sliderRelease()));
         QObject::connect(closeButton, SIGNAL(clicked()), VideoPlayerClass, SLOT(close()));
+        QObject::connect(minButton, SIGNAL(clicked()), VideoPlayerClass, SLOT(showMinimized()));
+        QObject::connect(maxButton, SIGNAL(clicked()), VideoPlayerClass, SLOT(fullResetScreen()));
 
         QMetaObject::connectSlotsByName(VideoPlayerClass);
     } // setupUi
@@ -131,6 +159,8 @@ public:
         pushButton->setText(QApplication::translate("VideoPlayerClass", "open", Q_NULLPTR));
         pauseButton->setText(QString());
         playButton->setText(QString());
+        minButton->setText(QApplication::translate("VideoPlayerClass", "\344\270\200", Q_NULLPTR));
+        maxButton->setText(QApplication::translate("VideoPlayerClass", "\345\217\243", Q_NULLPTR));
         closeButton->setText(QApplication::translate("VideoPlayerClass", "X", Q_NULLPTR));
     } // retranslateUi
 

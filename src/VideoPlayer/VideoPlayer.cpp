@@ -5,18 +5,22 @@
 #include<QMessageBox>
 #include<opencv2/imgproc.hpp>
 #include<opencv2/highgui.hpp>
+#include<QGridLayout>
+#include<QHBoxLayout>
 VideoPlayer::VideoPlayer(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 	setWindowFlags(Qt::FramelessWindowHint);
+ 
+
 	qRegisterMetaType<cv::Mat>("cv::Mat");
 	QObject::connect(VideoThread::getInstance(),
 		SIGNAL(sendVideoFrame(cv::Mat)),
 		ui.vowScreen,
 		SLOT(setImage(cv::Mat))
 	);
-
+	isFullScreen = false;
 	pause();
 
 	startTimer(40);//Æô¶¯¼ÆÊ±Æ÷
@@ -42,6 +46,19 @@ void VideoPlayer::timerEvent(QTimerEvent * e)
 	double pos = VideoThread::getInstance()->getPos();
 	ui.playSlider->setValue(pos * 1000);
 	
+}
+
+void VideoPlayer::mouseDoubleClickEvent(QMouseEvent * event)
+{
+	if (windowState() &  Qt::WindowFullScreen)
+		showNormal();
+	else
+		showFullScreen();
+}
+
+void VideoPlayer::resizeEvent(QResizeEvent * e)
+{
+	ui.vowScreen->resize(size());
 }
 
 void VideoPlayer::play()
@@ -73,4 +90,17 @@ void VideoPlayer::sliderPress()
 void VideoPlayer::setPos(int pos)
 {
 	VideoThread::getInstance()->seek((double)pos / 1000);
+}
+
+void VideoPlayer::fullResetScreen()
+{
+	if (!isFullScreen) {
+		showFullScreen();
+		isFullScreen = true;
+		
+	}
+	else {
+		showNormal();
+		isFullScreen = false;
+	}
 }

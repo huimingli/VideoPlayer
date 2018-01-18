@@ -66,7 +66,7 @@ void VideoThread::run()
 
 		int s = 0;
 		s = 1000 / fps;
-		msleep(s);
+		msleep(s-9);
 		mutex.unlock();
 	}
 }

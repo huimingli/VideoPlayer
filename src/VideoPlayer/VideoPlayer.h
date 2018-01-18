@@ -10,6 +10,8 @@ class VideoPlayer : public QMainWindow
 public:
 	VideoPlayer(QWidget *parent = Q_NULLPTR);
 	void timerEvent(QTimerEvent*e);
+	void mouseDoubleClickEvent(QMouseEvent * event);
+	void resizeEvent(QResizeEvent *e);
 public slots:
 	void openVideo();
 	void play();
@@ -17,8 +19,10 @@ public slots:
 	void sliderRelease();
 	void sliderPress();
 	void setPos(int pos);
+	void fullResetScreen();
 
 private:
 	Ui::VideoPlayerClass ui;
 	bool pressSlider;
+	bool isFullScreen;
 };

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Resource object code
 **
-** Created by: The Resource Compiler for Qt version 5.9.1
+** Created by: The Resource Compiler for Qt version 5.8.0
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -1840,7 +1840,7 @@ int QT_RCC_MANGLE_NAMESPACE(qInitResources_VideoPlayer)();
 int QT_RCC_MANGLE_NAMESPACE(qInitResources_VideoPlayer)()
 {
     QT_RCC_PREPEND_NAMESPACE(qRegisterResourceData)
-        (0x2, qt_resource_struct, qt_resource_name, qt_resource_data);
+        (0x02, qt_resource_struct, qt_resource_name, qt_resource_data);
     return 1;
 }
 
@@ -1848,7 +1848,7 @@ int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_VideoPlayer)();
 int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_VideoPlayer)()
 {
     QT_RCC_PREPEND_NAMESPACE(qUnregisterResourceData)
-       (0x2, qt_resource_struct, qt_resource_name, qt_resource_data);
+       (0x02, qt_resource_struct, qt_resource_name, qt_resource_data);
     return 1;
 }
 
