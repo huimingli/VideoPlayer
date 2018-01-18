@@ -12,6 +12,7 @@ public:
 	void timerEvent(QTimerEvent*e);
 	void mouseDoubleClickEvent(QMouseEvent * event);
 	void resizeEvent(QResizeEvent *e);
+	void mouseMoveEvent(QMouseEvent *event);
 public slots:
 	void openVideo();
 	void play();

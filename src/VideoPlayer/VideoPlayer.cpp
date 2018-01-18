@@ -7,12 +7,17 @@
 #include<opencv2/highgui.hpp>
 #include<QGridLayout>
 #include<QHBoxLayout>
+#include<QMouseEvent>
 VideoPlayer::VideoPlayer(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 	setWindowFlags(Qt::FramelessWindowHint);
- 
+    setMouseTracking(true);
+	ui.centralWidget->setMouseTracking(true);
+	
+	ui.vowScreen->setMouseTracking(true);
+	ui.bottomWidget->setMouseTracking(true);
 	qRegisterMetaType<cv::Mat>("cv::Mat");
 	QObject::connect(VideoThread::getInstance(),
 		SIGNAL(sendVideoFrame(cv::Mat)),
@@ -61,7 +66,6 @@ void VideoPlayer::resizeEvent(QResizeEvent * e)
 	ui.bottomWidget->move(0, this->height() - ui.bottomWidget->height());
 	ui.bottomWidget->resize(QSize(this->width(), ui.bottomWidget->height()));
 
-	
 
 	ui.playSlider->move(25, ui.playSlider->y());
 	ui.playSlider->resize(this->width() - 50, ui.playSlider->height());
@@ -70,6 +74,19 @@ void VideoPlayer::resizeEvent(QResizeEvent * e)
 	ui.pushButton->move(ui.bottomWidget->width() / 2 - 50, ui.playSlider->y() + 30);
 
 	ui.topButtons->move(this->width() - ui.topButtons->width() - 5, ui.topButtons->height() + 5);
+}
+
+void VideoPlayer::mouseMoveEvent(QMouseEvent * event)
+{
+	if (isFullScreen) {
+        int y = event->globalY();
+	    if (y >= height() - 100) {
+		    ui.bottomWidget->move(0, this->height() - ui.bottomWidget->height());
+	    }
+	    else {
+		    ui.bottomWidget->move(0, this->height());
+	    }
+	}
 }
 
 void VideoPlayer::play()
@@ -108,10 +125,13 @@ void VideoPlayer::fullResetScreen()
 	if (!isFullScreen) {
 		showFullScreen();
 		isFullScreen = true;
-		
+		ui.bottomWidget->move(0, height());
+		 
 	}
 	else {
 		showNormal();
 		isFullScreen = false;
+		ui.bottomWidget->move(0, this->height() - ui.bottomWidget->height());
+
 	}
 }
