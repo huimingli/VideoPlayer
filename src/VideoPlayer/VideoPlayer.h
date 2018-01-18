@@ -2,7 +2,8 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_VideoPlayer.h"
-
+#include<QMouseEvent>
+#include<QPropertyAnimation>
 class VideoPlayer : public QMainWindow
 {
 	Q_OBJECT
@@ -25,5 +26,11 @@ public slots:
 private:
 	Ui::VideoPlayerClass ui;
 	bool pressSlider;
+	QPropertyAnimation *bottomAnimation;
+	QPropertyAnimation *topAnimation;
 	bool isFullScreen;
+	void showBottomInAnimation();
+	void hideBottomInAnimation();
+	void showTopInAnimation();
+	void hideTopInAnimation();
 };

@@ -7,17 +7,18 @@
 #include<opencv2/highgui.hpp>
 #include<QGridLayout>
 #include<QHBoxLayout>
-#include<QMouseEvent>
+
 VideoPlayer::VideoPlayer(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 	setWindowFlags(Qt::FramelessWindowHint);
+	bottomAnimation = new QPropertyAnimation(ui.bottomWidget, "geometry");
+	topAnimation = new QPropertyAnimation(ui.topButtons, "geometry");
     setMouseTracking(true);
 	ui.centralWidget->setMouseTracking(true);
-	
 	ui.vowScreen->setMouseTracking(true);
-	ui.bottomWidget->setMouseTracking(true);
+ 
 	qRegisterMetaType<cv::Mat>("cv::Mat");
 	QObject::connect(VideoThread::getInstance(),
 		SIGNAL(sendVideoFrame(cv::Mat)),
@@ -73,18 +74,20 @@ void VideoPlayer::resizeEvent(QResizeEvent * e)
 	ui.playButton->move(ui.bottomWidget->width() / 2 + 50, ui.playSlider->y()+30);
 	ui.pushButton->move(ui.bottomWidget->width() / 2 - 50, ui.playSlider->y() + 30);
 
-	ui.topButtons->move(this->width() - ui.topButtons->width() - 5, ui.topButtons->height() + 5);
+	ui.topButtons->move(this->width() - ui.topButtons->width() - 5, 5);
 }
 
 void VideoPlayer::mouseMoveEvent(QMouseEvent * event)
 {
 	if (isFullScreen) {
         int y = event->globalY();
-	    if (y >= height() - 100) {
-		    ui.bottomWidget->move(0, this->height() - ui.bottomWidget->height());
+	    if (y >= height() - 100 || y<=5) {
+			showBottomInAnimation();
+			showTopInAnimation();
 	    }
 	    else {
-		    ui.bottomWidget->move(0, this->height());
+			hideBottomInAnimation();
+			hideTopInAnimation();
 	    }
 	}
 }
@@ -125,13 +128,58 @@ void VideoPlayer::fullResetScreen()
 	if (!isFullScreen) {
 		showFullScreen();
 		isFullScreen = true;
-		ui.bottomWidget->move(0, height());
-		 
+		hideBottomInAnimation();
+		hideTopInAnimation();
 	}
 	else {
 		showNormal();
 		isFullScreen = false;
-		ui.bottomWidget->move(0, this->height() - ui.bottomWidget->height());
+		showBottomInAnimation();
+		showTopInAnimation();
+	}
+}
 
+void VideoPlayer::showBottomInAnimation()
+{
+	if (ui.bottomWidget->y() == height()) {
+		bottomAnimation->setDuration(500);
+		bottomAnimation->setStartValue(QRect(ui.bottomWidget->x(), height(), ui.bottomWidget->width(), ui.bottomWidget->height()));
+
+		bottomAnimation->setEndValue(QRect(ui.bottomWidget->x(), this->height() - ui.bottomWidget->height(), ui.bottomWidget->width(), ui.bottomWidget->height()));
+		bottomAnimation->start();
+	}
+}
+
+void VideoPlayer::hideBottomInAnimation()
+{
+	if (ui.bottomWidget->y() == this->height() - ui.bottomWidget->height()) {
+		bottomAnimation->setDuration(500);
+		bottomAnimation->setStartValue(QRect(ui.bottomWidget->x(), this->height() - ui.bottomWidget->height(), ui.bottomWidget->width(), ui.bottomWidget->height()));
+
+		bottomAnimation->setEndValue(QRect(ui.bottomWidget->x(), this->height(), ui.bottomWidget->width(), ui.bottomWidget->height()));
+		bottomAnimation->start();
+	}
+}
+
+void VideoPlayer::showTopInAnimation()
+{
+	if (ui.topButtons->y() == -5 - ui.topButtons->height()) {
+        topAnimation->setDuration(500);
+	    topAnimation->setStartValue(QRect(ui.topButtons->x(), -5-ui.topButtons->height(), ui.topButtons->width(), ui.bottomWidget->height()));
+
+	    topAnimation->setEndValue(QRect(ui.topButtons->x(), 5, ui.topButtons->width(), ui.topButtons->height()));
+	    topAnimation->start();
+	}
+	
+}
+
+void VideoPlayer::hideTopInAnimation()
+{
+	if (ui.topButtons->y() == 5) {
+		topAnimation->setDuration(500);
+		topAnimation->setStartValue(QRect(ui.topButtons->x(), 5, ui.topButtons->width(), ui.bottomWidget->height()));
+
+		topAnimation->setEndValue(QRect(ui.topButtons->x(), -5 - ui.topButtons->height(), ui.topButtons->width(), ui.topButtons->height()));
+		topAnimation->start();
 	}
 }
